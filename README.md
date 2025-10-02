@@ -13,6 +13,18 @@ A playground for comparing Model Context Protocol (MCP) style tool adapters to d
 - Node.js 20.x (the devcontainer image installs it automatically).
 - pnpm 9 (`corepack enable` ensures the right version locally).
 - Optional: `tc` (traffic control) with `netem` support if you want to run latency/packet-loss experiments outside the devcontainer.
+- Optional: [Ollama](https://ollama.com/download) (on the host machine, Windows or macOS) if you want to run the `agent-runner` package.  
+  - After installation, pull a model such as `llama3.2`:
+    ```bash
+    ollama pull llama3.2
+    ```
+  - Test it on the host:
+    ```bash
+    ollama serve
+    ollama run llama3.2
+    ```
+  - The devcontainer connects to it via `http://host.docker.internal:11434`. (this is configured in `packages/agent-runner/src/clients/ollama.ts`)
+
 
 ## Quick start
 ```bash
@@ -52,6 +64,30 @@ Each package also exposes `build` and `test` scripts.
 3. (Optional) Use `pnpm bench:netem` to re-run the suite under simulated network latency/loss. This script uses `tc netem` and needs elevated privileges—prefer running it inside the devcontainer where NET_ADMIN is granted.
 
 Benchmark results are printed as console tables per scenario (HTTP and filesystem) with one row per payload size.
+
+## Agent runner (LLM integration with Ollama)
+
+The `packages/agent-runner` package lets a local LLM (running via [Ollama](https://ollama.com)) call the same tools defined in this repo.  
+This demonstrates how DTA vs MCP implementations can be driven by a model.
+
+### Setup
+
+1. Install Ollama on your **host machine** (Windows/macOS): https://ollama.com/download  
+2. Pull a small model such as `llama3.2` (outside the devcontainer):
+   ```bash
+   ollama pull llama3.2
+   ollama serve 
+   ollama run llama3.2
+   ```
+3. Run the agent (from inside the devcontainer):
+  ```
+  LOCAL_LLM_MODEL="llama3.2" \
+  LOCAL_LLM_URL="http://host.docker.internal:11434" \
+  pnpm -C packages/agent-runner start -- "Create 'note.txt' with 'hello' then read it."
+  ```
+4. The agent writes/reads files under `packages/agent-runner/sandbox/`
+5. For HTTP tools, start the mock server first with `pnpm mock` (this is not implemented yet)
+
 
 ## Development container
 Open the repository in VS Code and choose **Dev Containers: Reopen in Container**. The container:
