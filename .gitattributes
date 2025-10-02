@@ -1,0 +1,19 @@
+# Normalize all text files to LF on commit
+* text=auto eol=lf
+
+# Explicitly enforce LF endings for source
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+
+# Treat these as binary (no diff/merge messing)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.svg binary

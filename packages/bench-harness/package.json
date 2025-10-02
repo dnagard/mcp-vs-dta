@@ -1,0 +1,21 @@
+{
+  "name": "@proj/bench-harness",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/harness.js",
+  "exports": "./dist/harness.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --reporter=dot",
+    "bench": "tsx src/harness.ts",
+    "dev": "tsx src/harness.ts"
+  },
+  "dependencies": {
+    "tinybench": "^2.8.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.2",
+    "vitest": "^2.0.5"
+  }
+}
