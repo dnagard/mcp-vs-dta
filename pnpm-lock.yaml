@@ -35,6 +35,22 @@ importers:
         specifier: ^5.6.2
         version: 5.9.3
 
+  packages/agent-runner:
+    dependencies:
+      '@proj/dta-impl':
+        specifier: workspace:*
+        version: link:../dta-impl
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      tsx:
+        specifier: ^4.16.2
+        version: 4.20.6
+      typescript:
+        specifier: ^5.6.2
+        version: 5.9.3
+
   packages/bench-harness:
     dependencies:
       '@proj/dta-impl':
@@ -1535,6 +1551,9 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
 snapshots:
 
@@ -3049,3 +3068,5 @@ snapshots:
   word-wrap@1.2.5: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@3.25.76: {}
