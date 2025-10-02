@@ -10,6 +10,12 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+
+    "baseUrl": ".",
+    "paths": {
+      "@proj/dta-impl": ["packages/dta-impl/dist"],
+      "@proj/mcp-impl": ["packages/mcp-impl/dist"]
+    }
   }
 }

@@ -11,7 +11,9 @@
     "dev": "tsx src/harness.ts"
   },
   "dependencies": {
-    "tinybench": "^2.8.0"
+    "tinybench": "^2.8.0",
+    "@proj/dta-impl": "workspace:*",
+    "@proj/mcp-impl": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.16.2",

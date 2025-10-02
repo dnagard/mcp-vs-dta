@@ -4,6 +4,8 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+packageExtensionsChecksum: f0d49f01a36ec815f7dbb1fc3efa3aa0
+
 importers:
 
   .:
@@ -26,12 +28,21 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
+      tsx:
+        specifier: ^4.16.2
+        version: 4.20.6
       typescript:
         specifier: ^5.6.2
         version: 5.9.3
 
   packages/bench-harness:
     dependencies:
+      '@proj/dta-impl':
+        specifier: workspace:*
+        version: link:../dta-impl
+      '@proj/mcp-impl':
+        specifier: workspace:*
+        version: link:../mcp-impl
       tinybench:
         specifier: ^2.8.0
         version: 2.9.0
@@ -59,6 +70,10 @@ importers:
         version: 2.1.9(@types/node@20.19.19)
 
   packages/mcp-impl:
+    dependencies:
+      '@proj/dta-impl':
+        specifier: workspace:*
+        version: link:../dta-impl
     devDependencies:
       tsx:
         specifier: ^4.16.2

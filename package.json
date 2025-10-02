@@ -3,10 +3,14 @@
   "private": true,
   "packageManager": "pnpm@9.12.0",
   "scripts": {
+    "init": "pnpm install",
     "build": "pnpm -r --filter ./packages/... run build",
     "test": "pnpm -r --filter ./packages/... run test",
+    "mock": "tsx scripts/seed_endpoints.ts",
+    "bench": "pnpm -r --filter @proj/* run build && pnpm -C packages/bench-harness run bench",
+    "bench:netem": "sudo bash scripts/setup-netem.sh eth0 40ms 10ms 1% && pnpm bench && sudo bash scripts/clear-netem.sh",
     "lint": "eslint .",
-    "bench": "pnpm -C packages/bench-harness run bench",
+    "format": "prettier --write .",
     "dev": "echo 'use package-level dev scripts'",
     "prepare": "husky install || true"
   },
@@ -15,8 +19,19 @@
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.30.0",
+    "husky": "^9.1.6",
     "prettier": "^3.3.3",
-    "typescript": "^5.6.2",
-    "husky": "^9.1.6"
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.2"
+  },
+  "pnpm": {
+    "packageExtensions": {
+      "@proj/bench-harness@*": {
+        "peerDependencies": {
+          "@proj/dta-impl": "*",
+          "@proj/mcp-impl": "*"
+        }
+      }
+    }
   }
 }
