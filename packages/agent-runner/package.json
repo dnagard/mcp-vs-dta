@@ -4,14 +4,22 @@
   "type": "module",
   "main": "dist/runner.js",
   "exports": "./dist/runner.js",
+  "bin": {
+    "agent-dta-repl": "dist/cli/agent-dta-repl.js",
+    "agent-mcp-repl": "dist/cli/agent-mcp-repl.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "tsx src/runner.ts",
-    "dev": "tsx src/runner.ts"
+    "dev": "tsx src/runner.ts",
+    "agent:dta": "node dist/cli/agent-dta-repl.js",
+    "agent:mcp": "node dist/cli/agent-mcp-repl.js",
+    "agent:dta:dev": "tsx src/cli/agent-dta-repl.ts",
+    "agent:mcp:dev": "tsx src/cli/agent-mcp-repl.ts"
   },
   "dependencies": {
-    "zod": "^3.23.8",
-    "@proj/dta-impl": "workspace:*"
+    "@proj/dta-impl": "workspace:*",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "tsx": "^4.16.2",

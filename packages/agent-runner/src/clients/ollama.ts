@@ -7,7 +7,7 @@ export async function chatOllama(opts: {
   temperature?: number;
 }) {
   const {
-    model = "llama3.2",
+    model = "llama3.1:8b",
     messages,
     baseUrl = "http://localhost:11434",
     temperature = 0,

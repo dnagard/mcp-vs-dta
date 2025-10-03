@@ -4,8 +4,8 @@
   "packageManager": "pnpm@9.12.0",
   "scripts": {
     "init": "pnpm install",
-    "build": "pnpm -r --filter ./packages/... run build",
-    "test": "pnpm -r --filter ./packages/... run test",
+    "build": "pnpm -r build",
+    "test": "pnpm -r --filter ./packages/** run test",
     "mock": "tsx scripts/seed_endpoints.ts",
     "bench": "pnpm -r --filter @proj/* run build && pnpm -C packages/bench-harness run bench",
     "bench:netem": "sudo bash scripts/setup-netem.sh eth0 40ms 10ms 1% && pnpm bench && sudo bash scripts/clear-netem.sh",

@@ -1,5 +1,5 @@
-import { ensureSandbox, toolCatalogForPrompt, callTool, ToolName } from "./tools";
-import { chatOllama } from "./clients/ollama";
+import { ensureSandbox, toolCatalogForPrompt, callTool, ToolName } from "./tools.js";
+import { chatOllama } from "./clients/ollama.js";
 
 function systemPrompt(catalog: any) {
   return [
@@ -35,8 +35,8 @@ function extractFirstJsonObject(s: string) {
 
 async function main() {
   await ensureSandbox();
-  const model = process.env.LOCAL_LLM_MODEL || "llama3.2";
-  const baseUrl = process.env.LOCAL_LLM_URL || "http://localhost:11434";
+  const model = process.env.LOCAL_LLM_MODEL || "llama3.1:8b";
+  const baseUrl = process.env.LOCAL_LLM_URL || "http://host.docker.internal:11434";
   const userTask = process.argv.slice(2).join(" ") || "Create hello.txt with 'hi' then read it back";
 
   const catalog = toolCatalogForPrompt();
