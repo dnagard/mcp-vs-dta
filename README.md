@@ -73,17 +73,15 @@ This demonstrates how DTA vs MCP implementations can be driven by a model.
 ### Setup
 
 1. Install Ollama on your **host machine** (Windows/macOS): https://ollama.com/download  
-2. Pull a small model such as `llama3.2` (outside the devcontainer):
+2. Pull a small model such as `llama3.1:8b` (outside the devcontainer):
    ```bash
-   ollama pull llama3.2
+   ollama pull llama3.1:8b
    ollama serve 
-   ollama run llama3.2
+   ollama run llama3.1:8b
    ```
 3. Run the agent (from inside the devcontainer):
   ```
-  LOCAL_LLM_MODEL="llama3.2" \
-  LOCAL_LLM_URL="http://host.docker.internal:11434" \
-  pnpm -C packages/agent-runner start -- "Create 'note.txt' with 'hello' then read it."
+  pnpm --filter @proj/agent-runner agent:dta
   ```
 4. The agent writes/reads files under `packages/agent-runner/sandbox/`
 5. For HTTP tools, start the mock server first with `pnpm mock` (this is not implemented yet)
