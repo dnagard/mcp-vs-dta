@@ -14,14 +14,14 @@ A playground for comparing Model Context Protocol (MCP) style tool adapters to d
 - pnpm 9 (`corepack enable` ensures the right version locally).
 - Optional: `tc` (traffic control) with `netem` support if you want to run latency/packet-loss experiments outside the devcontainer.
 - Optional: [Ollama](https://ollama.com/download) (on the host machine, Windows or macOS) if you want to run the `agent-runner` package.  
-  - After installation, pull a model such as `llama3.2`:
+  - After installation, pull a model such as `llama3.1:8b`:
     ```bash
-    ollama pull llama3.2
+    ollama pull llama3.1:8b
     ```
   - Test it on the host:
     ```bash
     ollama serve
-    ollama run llama3.2
+    ollama run llama3.1:8b
     ```
   - The devcontainer connects to it via `http://host.docker.internal:11434`. (this is configured in `packages/agent-runner/src/clients/ollama.ts`)
 
