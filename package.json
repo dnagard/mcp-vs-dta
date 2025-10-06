@@ -29,7 +29,7 @@
       "@proj/bench-harness@*": {
         "peerDependencies": {
           "@proj/dta-impl": "*",
-          "@proj/mcp-impl": "*"
+          "@proj/mcp-server": "*"
         }
       }
     }

@@ -4,7 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-packageExtensionsChecksum: f0d49f01a36ec815f7dbb1fc3efa3aa0
+packageExtensionsChecksum: 7d66b5be467bc316ec9857d5f7204ade
 
 importers:
 
@@ -40,6 +40,9 @@ importers:
       '@proj/dta-impl':
         specifier: workspace:*
         version: link:../dta-impl
+      '@proj/mcp-server':
+        specifier: workspace:*
+        version: link:../mcp-server
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -56,9 +59,9 @@ importers:
       '@proj/dta-impl':
         specifier: workspace:*
         version: link:../dta-impl
-      '@proj/mcp-impl':
+      '@proj/mcp-server':
         specifier: workspace:*
-        version: link:../mcp-impl
+        version: link:../mcp-server
       tinybench:
         specifier: ^2.8.0
         version: 2.9.0
@@ -90,6 +93,25 @@ importers:
       '@proj/dta-impl':
         specifier: workspace:*
         version: link:../dta-impl
+    devDependencies:
+      tsx:
+        specifier: ^4.16.2
+        version: 4.20.6
+      typescript:
+        specifier: ^5.6.2
+        version: 5.9.3
+      vitest:
+        specifier: ^2.0.5
+        version: 2.1.9(@types/node@20.19.19)
+
+  packages/mcp-server:
+    dependencies:
+      '@proj/dta-impl':
+        specifier: workspace:*
+        version: link:../dta-impl
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       tsx:
         specifier: ^4.16.2

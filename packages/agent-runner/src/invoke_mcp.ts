@@ -10,7 +10,10 @@ export class MCPInvoker implements ToolInvoker {
   private inflight = new Map<string, (res: JsonRpcRes) => void>();
   private buf = "";
 
-  constructor(cmd = process.env.MCP_CMD ?? "node", args = (process.env.MCP_ARGS ?? "").split(" ").filter(Boolean)) {
+  constructor(
+    cmd = process.env.MCP_CMD ?? "mcp-server",
+    args = (process.env.MCP_ARGS ?? "").split(" ").filter(Boolean)
+  ) {
     this.proc = spawn(cmd, args, { stdio: ["pipe", "pipe", "inherit"] });
     this.proc.stdout.setEncoding("utf8");
     this.proc.stdout.on("data", (chunk) => {

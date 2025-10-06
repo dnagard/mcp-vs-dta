@@ -13,7 +13,7 @@
   "dependencies": {
     "tinybench": "^2.8.0",
     "@proj/dta-impl": "workspace:*",
-    "@proj/mcp-impl": "workspace:*"
+    "@proj/mcp-server": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.16.2",

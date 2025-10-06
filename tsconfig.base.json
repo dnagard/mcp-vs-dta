@@ -15,7 +15,8 @@
     "baseUrl": ".",
     "paths": {
       "@proj/dta-impl": ["packages/dta-impl/dist"],
-      "@proj/mcp-impl": ["packages/mcp-impl/dist"]
+      "@proj/mcp-impl": ["packages/mcp-impl/dist"],
+      "@proj/mcp-server": ["packages/mcp-server/dist"]
     }
   }
 }

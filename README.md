@@ -65,6 +65,33 @@ Each package also exposes `build` and `test` scripts.
 
 Benchmark results are printed as console tables per scenario (HTTP and filesystem) with one row per payload size.
 
+## MCP server
+
+The `@proj/mcp-server` package implements a JSON-RPC 2.0 bridge that exposes the repository tools over an MCP-compatible stdio channel.
+
+- Build once (creates `dist/` so other packages can invoke the binary):
+  ```bash
+  pnpm -C packages/mcp-server run build
+  ```
+- Run the server in dev mode:
+  ```bash
+  pnpm -C packages/mcp-server run dev
+  ```
+  The process prints `ready` to stderr and waits for newline-delimited JSON requests on stdin. Exactly one JSON-RPC response is emitted per request.
+- Environment variables:
+  - `MCP_SANDBOX_ROOT` – absolute/relative path used as the filesystem sandbox (defaults to `<cwd>/sandbox`).
+  - `MCP_CMD` / `MCP_ARGS` – used by consumers (agent runner, benchmarks) to override the launched binary/arguments.
+
+Example request/response pairs:
+
+```json
+{"jsonrpc":"2.0","id":"1","method":"tools/list"}
+{"jsonrpc":"2.0","id":"1","result":{"tools":[...]}}
+
+{"jsonrpc":"2.0","id":"2","method":"tools/call","params":{"name":"write_file","arguments":{"path":"notes.txt","data":"hello"}}}
+{"jsonrpc":"2.0","id":"2","result":{"ok":true,"path":"/abs/sandbox/notes.txt","bytes":5}}
+```
+
 ## Agent runner (LLM integration with Ollama)
 
 The `packages/agent-runner` package lets a local LLM (running via [Ollama](https://ollama.com)) call the same tools defined in this repo.  
@@ -101,4 +128,3 @@ The `Makefile` mirrors the pnpm scripts (`init`, `build`, `test`, `bench`) and a
 - Vitest is run in "dot" reporter mode for succinct output; add `--watch` manually when iterating locally.
 - The TypeScript project uses `tsconfig.base.json` with path aliases that target the built `dist/` folders—run `pnpm build` before importing packages from each other.
 - When adding new benchmark scenarios, drop the files inside `packages/bench-harness/src/scenarios/` and register them in `src/harness.ts`.
-
