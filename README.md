@@ -61,9 +61,10 @@ Each package also exposes `build` and `test` scripts.
 ## Benchmark workflow
 1. Start the mock upstream in a dedicated terminal: `pnpm mock`.
 2. In another terminal run `pnpm bench` to compare MCP vs DTA HTTP/blob and filesystem operations.
-3. (Optional) Use `pnpm bench:netem` to re-run the suite under simulated network latency/loss. This script uses `tc netem` and needs elevated privileges—prefer running it inside the devcontainer where NET_ADMIN is granted.
+3. For percentile metrics (p50/p95/p99) and JSON artifacts, run `pnpm -C packages/bench-harness run bench:stats --output-json analysis/results/default.json`. Add `--collect-raw` to embed per-iteration timing samples.
+4. (Optional) Use `pnpm bench:netem` or `pnpm -C packages/bench-harness run bench:stats --profiles netem40 --output-json analysis/results/netem.json` to re-run the suite under simulated network latency/loss. These scripts rely on `tc netem` and need elevated privileges—prefer running them inside the devcontainer where NET_ADMIN is granted.
 
-Benchmark results are printed as console tables per scenario (HTTP and filesystem) with one row per payload size.
+Benchmark runs now emit console tables and machine-readable JSON payloads capturing mean, p50, p95, and p99 latencies for each scenario.
 
 ## MCP server
 
