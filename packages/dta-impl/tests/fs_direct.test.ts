@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { readFileDirect, writeFileDirect, rmFileDirect } from "../src/fs_direct";
+import {
+  readFileDirect,
+  writeFileDirect,
+  rmFileDirect,
+} from "../src/fs_direct";
 import { randomBytes } from "node:crypto";
 
 describe("fs_direct", () => {

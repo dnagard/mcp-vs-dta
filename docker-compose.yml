@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  mcp-vs-dta:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: mcp-vs-dta-dev
+    volumes:
+      - .:/workspace
+      - gh-config:/home/vscode/.config/gh
+    working_dir: /workspace
+    cap_add:
+      - NET_ADMIN
+    command: bash -c "corepack enable && pnpm install && bash"
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  gh-config:

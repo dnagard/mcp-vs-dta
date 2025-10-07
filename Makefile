@@ -10,6 +10,9 @@ build:
 bench:
 	pnpm bench
 
+bench-stats:
+	pnpm -C packages/bench-harness run bench:stats --output-json analysis/results/latest.json
+
 up:
 	docker compose up -d || true
 

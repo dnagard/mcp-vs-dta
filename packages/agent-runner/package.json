@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@proj/dta-impl": "workspace:*",
+    "@proj/mcp-server": "workspace:*",
     "zod": "^3.23.8"
   },
   "devDependencies": {

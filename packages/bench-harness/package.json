@@ -8,12 +8,13 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --reporter=dot",
     "bench": "tsx src/harness.ts",
-    "dev": "tsx src/harness.ts"
+    "dev": "tsx src/harness.ts",
+    "bench:stats": "tsx src/cli/bench-stats.ts"
   },
   "dependencies": {
     "tinybench": "^2.8.0",
     "@proj/dta-impl": "workspace:*",
-    "@proj/mcp-impl": "workspace:*"
+    "@proj/mcp-server": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.16.2",

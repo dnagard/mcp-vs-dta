@@ -1,0 +1,98 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tool catalog > matches expected shape 1`] = `
+[
+  {
+    "description": "Write a UTF-8 text file in the sandbox.",
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "description": "UTF-8 file contents",
+          "type": "string",
+        },
+        "path": {
+          "description": "Relative path under sandbox, e.g. 'note.txt'",
+          "type": "string",
+        },
+      },
+      "required": [
+        "path",
+        "data",
+      ],
+      "type": "object",
+    },
+    "name": "write_file",
+  },
+  {
+    "description": "Read a UTF-8 file from the sandbox.",
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "Relative path under sandbox",
+          "type": "string",
+        },
+      },
+      "required": [
+        "path",
+      ],
+      "type": "object",
+    },
+    "name": "read_file",
+  },
+  {
+    "description": "Remove a file from the sandbox.",
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "Relative path under sandbox",
+          "type": "string",
+        },
+      },
+      "required": [
+        "path",
+      ],
+      "type": "object",
+    },
+    "name": "remove_file",
+  },
+  {
+    "description": "HTTP GET expecting JSON.",
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "description": "Absolute URL",
+          "format": "uri",
+          "type": "string",
+        },
+      },
+      "required": [
+        "url",
+      ],
+      "type": "object",
+    },
+    "name": "http_get_json",
+  },
+  {
+    "description": "HTTP GET returning binary size.",
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "description": "Absolute URL",
+          "format": "uri",
+          "type": "string",
+        },
+      },
+      "required": [
+        "url",
+      ],
+      "type": "object",
+    },
+    "name": "http_get_blob",
+  },
+]
+`;

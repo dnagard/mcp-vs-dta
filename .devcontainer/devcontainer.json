@@ -6,7 +6,7 @@
     "terminal.integrated.defaultProfile.linux": "bash",
     "editor.formatOnSave": true
   },
-  "postCreateCommand": "corepack enable && pnpm i",
+  "postCreateCommand": "pnpm i",
   "postStartCommand": "sudo mkdir -p /home/vscode/.config/gh && sudo chown -R vscode:vscode /home/vscode/.config/gh",
   "remoteUser": "vscode",
   "updateRemoteUserUID": true,
@@ -17,9 +17,7 @@
   },
 
   // 2) Persist your gh auth token across rebuilds (local to your machine)
-  "mounts": [
-    "source=gh-config,target=/home/vscode/.config/gh,type=volume"
-  ],
+  "mounts": ["source=gh-config,target=/home/vscode/.config/gh,type=volume"],
 
   "customizations": {
     "vscode": {
