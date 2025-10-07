@@ -8,7 +8,16 @@
     "test": "pnpm -r --filter ./packages/** run test",
     "mock": "tsx scripts/seed_endpoints.ts",
     "bench": "pnpm -r --filter @proj/* run build && pnpm -C packages/bench-harness run bench",
-    "bench:netem": "sudo bash scripts/setup-netem.sh eth0 40ms 10ms 1% && pnpm bench && sudo bash scripts/clear-netem.sh",
+    "bench:medium": "pnpm -r --filter @proj/* run build && pnpm -C packages/bench-harness run bench:medium",
+    "bench:large": "pnpm -r --filter @proj/* run build && pnpm -C packages/bench-harness run bench:large",
+
+    "bench:netem": "sudo bash scripts/setup-netem.sh lo 40ms 10ms 1% && pnpm bench && sudo bash scripts/clear-netem.sh",
+    "bench:delay": "sudo bash scripts/setup-netem.sh lo 40ms 10ms 0% && pnpm bench && sudo bash scripts/clear-netem.sh lo",
+    "bench:loss": "sudo bash scripts/setup-netem.sh lo 0ms 0ms 1% && pnpm bench && sudo bash scripts/clear-netem.sh lo",
+    "bench:mixed": "sudo bash scripts/setup-netem.sh lo 40ms 10ms 1% && pnpm bench && sudo bash scripts/clear-netem.sh lo",
+    "bench:bursty": "sudo bash scripts/setup-netem.sh lo 10ms 2ms 1% 25% && pnpm bench && sudo bash scripts/clear-netem.sh lo",
+    "bench:slowlink": "sudo bash scripts/setup-netem.sh lo 60ms 20ms 0% 0% 10mbit && pnpm bench && sudo bash scripts/clear-netem.sh lo",
+
     "lint": "eslint .",
     "format": "prettier --write .",
     "dev": "echo 'use package-level dev scripts'",

@@ -51,7 +51,7 @@ export async function httpSweep(impl: Impl, options: HttpSweepOptions = {}) {
     throw new Error("MCP client required for mcp implementation");
 
   const collectRaw = options.collectRaw ?? false;
-  const timeMs = options.timeMs ?? 200;
+  const timeMs = options.timeMs ??  5000;
 
   const base = "http://localhost:8080/blob?size=";
   const records: BenchRecord[] = [];
