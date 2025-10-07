@@ -22,7 +22,9 @@ export interface HarnessRun {
   };
 }
 
-export async function runHarness(options: HarnessOptions = {}): Promise<HarnessRun> {
+export async function runHarness(
+  options: HarnessOptions = {},
+): Promise<HarnessRun> {
   const profile = options.profile ?? "default";
   const collectRaw = options.collectRaw ?? false;
   const timeMs = options.timeMs;

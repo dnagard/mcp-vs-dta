@@ -35,8 +35,12 @@ export class BenchMcpClient {
   private closed: Promise<void>;
   private disposed = false;
 
-  constructor(cmd = process.env.MCP_BENCH_CMD ?? process.env.MCP_CMD ?? "mcp-server", args: string[] = []) {
-    const sandboxRoot = process.env.MCP_SANDBOX_ROOT ?? resolve(process.cwd(), "sandbox/bench");
+  constructor(
+    cmd = process.env.MCP_BENCH_CMD ?? process.env.MCP_CMD ?? "mcp-server",
+    args: string[] = [],
+  ) {
+    const sandboxRoot =
+      process.env.MCP_SANDBOX_ROOT ?? resolve(process.cwd(), "sandbox/bench");
     this.proc = spawn(cmd, args, {
       stdio: ["pipe", "pipe", "inherit"],
       env: { ...process.env, MCP_SANDBOX_ROOT: sandboxRoot },

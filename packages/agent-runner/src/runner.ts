@@ -1,4 +1,9 @@
-import { ensureSandbox, toolCatalogForPrompt, callTool, ToolName } from "./tools.js";
+import {
+  ensureSandbox,
+  toolCatalogForPrompt,
+  callTool,
+  ToolName,
+} from "./tools.js";
 import { chatOllama } from "./clients/ollama.js";
 
 function systemPrompt(catalog: any) {
@@ -8,7 +13,7 @@ function systemPrompt(catalog: any) {
     "Use EXACT argument names shown below. Do not invent names like filename/content.",
     "Choose ONE tool and ONE JSON object (do not include multiple JSON objects).",
     "Available tools:",
-    JSON.stringify(catalog, null, 2)
+    JSON.stringify(catalog, null, 2),
   ].join("\n");
 }
 
@@ -36,18 +41,22 @@ function extractFirstJsonObject(s: string) {
 async function main() {
   await ensureSandbox();
   const model = process.env.LOCAL_LLM_MODEL || "llama3.1:8b";
-  const baseUrl = process.env.LOCAL_LLM_URL || "http://host.docker.internal:11434";
-  const userTask = process.argv.slice(2).join(" ") || "Create hello.txt with 'hi' then read it back";
+  const baseUrl =
+    process.env.LOCAL_LLM_URL || "http://host.docker.internal:11434";
+  const userTask =
+    process.argv.slice(2).join(" ") ||
+    "Create hello.txt with 'hi' then read it back";
 
   const catalog = toolCatalogForPrompt();
 
   const reply = await chatOllama({
-    model, baseUrl,
+    model,
+    baseUrl,
     messages: [
       { role: "system", content: systemPrompt(catalog) },
-      { role: "user", content: userTask }
+      { role: "user", content: userTask },
     ],
-    temperature: 0
+    temperature: 0,
   });
 
   let parsed: { tool_name: ToolName; arguments: unknown };
@@ -60,12 +69,16 @@ async function main() {
   const result = await callTool(parsed.tool_name, parsed.arguments);
 
   const summary = await chatOllama({
-    model, baseUrl,
+    model,
+    baseUrl,
     messages: [
-      { role: "system", content: "Summarize the tool result briefly as plain text." },
-      { role: "user", content: JSON.stringify({ tool_call: parsed, result }) }
+      {
+        role: "system",
+        content: "Summarize the tool result briefly as plain text.",
+      },
+      { role: "user", content: JSON.stringify({ tool_call: parsed, result }) },
     ],
-    temperature: 0
+    temperature: 0,
   });
 
   console.log("Tool call:", parsed);
@@ -73,4 +86,7 @@ async function main() {
   console.log("LLM summary:", summary.trim());
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

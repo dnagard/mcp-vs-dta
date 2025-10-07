@@ -14,14 +14,19 @@ type McpListResult = {
   tools?: McpTool[];
 };
 
-export function mapMcpToOllamaTools(mcpListResult: McpListResult): OllamaTool[] {
-  const list: McpTool[] = Array.isArray(mcpListResult?.tools) ? mcpListResult.tools : [];
+export function mapMcpToOllamaTools(
+  mcpListResult: McpListResult,
+): OllamaTool[] {
+  const list: McpTool[] = Array.isArray(mcpListResult?.tools)
+    ? mcpListResult.tools
+    : [];
   return list
     .map((t: McpTool) => ({
       type: "function" as const,
       function: {
         name: String(t?.name ?? "").trim(),
-        description: typeof t?.description === "string" ? t.description : undefined,
+        description:
+          typeof t?.description === "string" ? t.description : undefined,
         parameters:
           t?.input_schema && typeof t.input_schema === "object"
             ? t.input_schema

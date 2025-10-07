@@ -23,7 +23,10 @@ function parseArgs(argv: string[]): CliOptions {
       case "--profiles": {
         const value = argv[++i];
         if (!value) throw new Error("--profiles requires a value");
-        options.profiles = value.split(",").map((p) => p.trim()).filter(Boolean);
+        options.profiles = value
+          .split(",")
+          .map((p) => p.trim())
+          .filter(Boolean);
         if (options.profiles.length === 0) {
           throw new Error("--profiles must include at least one profile");
         }
@@ -62,16 +65,22 @@ function parseArgs(argv: string[]): CliOptions {
 }
 
 function printHelp() {
-  console.log(`Usage: bench-stats [options]\n\n` +
-    `Options:\n` +
-    `  --profiles <list>     Comma-separated list of profiles (default)\n` +
-    `  --collect-raw         Include raw timing samples in JSON output\n` +
-    `  --output-json <path>  Write JSON results to the given file/path\n` +
-    `  --time-ms <number>    Override Tinybench duration per task (ms)\n` +
-    `  -h, --help            Show this help message`);
+  console.log(
+    `Usage: bench-stats [options]\n\n` +
+      `Options:\n` +
+      `  --profiles <list>     Comma-separated list of profiles (default)\n` +
+      `  --collect-raw         Include raw timing samples in JSON output\n` +
+      `  --output-json <path>  Write JSON results to the given file/path\n` +
+      `  --time-ms <number>    Override Tinybench duration per task (ms)\n` +
+      `  -h, --help            Show this help message`,
+  );
 }
 
-async function writeResult(run: HarnessRun, basePath: string, multiProfile: boolean) {
+async function writeResult(
+  run: HarnessRun,
+  basePath: string,
+  multiProfile: boolean,
+) {
   const timestamp = new Date().toISOString();
   const payload = JSON.stringify({ timestamp, ...run }, null, 2);
 
@@ -96,7 +105,7 @@ async function executeProfile(profile: string, options: CliOptions) {
       profile,
       collectRaw: options.collectRaw,
       timeMs: options.timeMs,
-    })
+    }),
   );
 }
 
@@ -137,7 +146,9 @@ async function main() {
   }
 
   if (!opts.outputPath) {
-    console.log("[bench-harness] No output path specified; skipping JSON export.");
+    console.log(
+      "[bench-harness] No output path specified; skipping JSON export.",
+    );
   }
 
   return runs;

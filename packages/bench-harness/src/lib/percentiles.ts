@@ -1,6 +1,8 @@
 export function percentile(values: number[], p: number): number {
   if (!Number.isFinite(p) || p < 0 || p > 100) {
-    throw new RangeError(`Percentile must be between 0 and 100. Received: ${p}`);
+    throw new RangeError(
+      `Percentile must be between 0 and 100. Received: ${p}`,
+    );
   }
   if (!Array.isArray(values) || values.length === 0) {
     throw new Error("Cannot compute percentile of empty dataset");

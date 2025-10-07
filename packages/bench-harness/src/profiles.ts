@@ -53,7 +53,10 @@ export const PROFILES: Record<string, BenchProfile> = {
   },
 };
 
-export async function withProfile<T>(profileName: string, runner: () => Promise<T>): Promise<T> {
+export async function withProfile<T>(
+  profileName: string,
+  runner: () => Promise<T>,
+): Promise<T> {
   const profile = PROFILES[profileName];
   if (!profile) {
     throw new Error(`Unknown profile: ${profileName}`);
@@ -63,7 +66,9 @@ export async function withProfile<T>(profileName: string, runner: () => Promise<
     try {
       await profile.setup();
     } catch (err) {
-      console.warn(`[bench-harness] Failed to apply profile '${profileName}': ${(err as Error).message}`);
+      console.warn(
+        `[bench-harness] Failed to apply profile '${profileName}': ${(err as Error).message}`,
+      );
       throw err;
     }
   }
@@ -76,7 +81,9 @@ export async function withProfile<T>(profileName: string, runner: () => Promise<
       try {
         await profile.teardown();
       } catch (err) {
-        console.warn(`[bench-harness] Failed to clear profile '${profileName}': ${(err as Error).message}`);
+        console.warn(
+          `[bench-harness] Failed to clear profile '${profileName}': ${(err as Error).message}`,
+        );
       }
     }
   }

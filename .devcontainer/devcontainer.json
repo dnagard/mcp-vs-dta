@@ -17,9 +17,7 @@
   },
 
   // 2) Persist your gh auth token across rebuilds (local to your machine)
-  "mounts": [
-    "source=gh-config,target=/home/vscode/.config/gh,type=volume"
-  ],
+  "mounts": ["source=gh-config,target=/home/vscode/.config/gh,type=volume"],
 
   "customizations": {
     "vscode": {

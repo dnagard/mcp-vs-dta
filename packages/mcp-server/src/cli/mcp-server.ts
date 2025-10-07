@@ -6,7 +6,9 @@ async function main() {
   const shutdown = async (signal: NodeJS.Signals | "exit") => {
     process.stderr.write(`shutting down (${signal})\n`);
     await handle.close().catch((err) => {
-      process.stderr.write(`error closing server: ${err instanceof Error ? err.message : String(err)}\n`);
+      process.stderr.write(
+        `error closing server: ${err instanceof Error ? err.message : String(err)}\n`,
+      );
     });
   };
 
@@ -29,7 +31,8 @@ async function main() {
 }
 
 main().catch((err) => {
-  const message = err instanceof Error ? err.stack ?? err.message : String(err);
+  const message =
+    err instanceof Error ? (err.stack ?? err.message) : String(err);
   process.stderr.write(message + "\n");
   process.exit(1);
 });

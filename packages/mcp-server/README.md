@@ -18,13 +18,13 @@ On startup the server ensures a sandbox directory and prints `ready` to stderr. 
 
 Errors follow the JSON-RPC conventions:
 
-| Code    | Meaning                             |
-|---------|-------------------------------------|
-| `-32700`| Parse error (malformed JSON)         |
-| `-32600`| Invalid request envelope             |
-| `-32601`| Unknown method/tool                  |
-| `-32602`| Invalid params (validation/sandbox)  |
-| `-32000`| Execution error (IO/network)         |
+| Code     | Meaning                             |
+| -------- | ----------------------------------- |
+| `-32700` | Parse error (malformed JSON)        |
+| `-32600` | Invalid request envelope            |
+| `-32601` | Unknown method/tool                 |
+| `-32602` | Invalid params (validation/sandbox) |
+| `-32000` | Execution error (IO/network)        |
 
 ## Environment variables
 

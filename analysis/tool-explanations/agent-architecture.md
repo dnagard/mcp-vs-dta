@@ -2,8 +2,8 @@
 
 ## What it means for ChatGPT/Claude to “support MCP”
 
-* **MCP is a protocol** (built on **JSON-RPC 2.0**) that lets an *LLM host/runtime* discover tools from an **MCP server** and invoke them via standardized calls like `tools/list` and `tools/call`. The host passes results back into the model’s context. ([Model Context Protocol][1])
-* In products like **ChatGPT (custom connectors)** and **Claude (desktop/web)**, the **runtime includes an MCP client**. The model decides *what* to call; the **MCP client** performs the JSON-RPC to the MCP server. You register your MCP server as a connector; the runtime does the wiring. ([OpenAI Help Center][2])
+- **MCP is a protocol** (built on **JSON-RPC 2.0**) that lets an _LLM host/runtime_ discover tools from an **MCP server** and invoke them via standardized calls like `tools/list` and `tools/call`. The host passes results back into the model’s context. ([Model Context Protocol][1])
+- In products like **ChatGPT (custom connectors)** and **Claude (desktop/web)**, the **runtime includes an MCP client**. The model decides _what_ to call; the **MCP client** performs the JSON-RPC to the MCP server. You register your MCP server as a connector; the runtime does the wiring. ([OpenAI Help Center][2])
 
 **Key point:** the **LLM itself doesn’t “speak MCP.”** The **host** does. The model outputs a tool choice/arguments; the **MCP client in the runtime** translates that into JSON-RPC and sends it to the MCP server, which runs the actual tool (local or remote) and returns the result. ([Model Context Protocol][1])
 
@@ -11,8 +11,8 @@
 
 ## How MCP calls look (at a glance)
 
-* **Discover tools:** `{"jsonrpc":"2.0","id":"1","method":"tools/list"}`
-* **Invoke tool:**
+- **Discover tools:** `{"jsonrpc":"2.0","id":"1","method":"tools/list"}`
+- **Invoke tool:**
   `{"jsonrpc":"2.0","id":"2","method":"tools/call","params":{"name":"write_file","arguments":{"path":"sandbox/x.txt","data":"hi"}}}`
   The server replies with `result` or `error`. Transports: **stdio** or **HTTP/streaming**. ([Model Context Protocol][3])
 
@@ -25,16 +25,14 @@ Ollama adds **tool/function calling**: you register tools (JSON Schemas); the mo
 Two modes we’ll support:
 
 1. **DTA (Direct Tool Adapters) with Ollama**
-
-   * Register our **Node tools** (e.g., `write_file`, `read_file`, `http_get_json`) directly with **Ollama Tools**.
-   * The model emits tool calls; our client executes them in-process; results go back into the chat.
-   * This matches “direct” tool integration in OpenAI/Anthropic function-calling. ([Mistral AI Documentation][5])
+   - Register our **Node tools** (e.g., `write_file`, `read_file`, `http_get_json`) directly with **Ollama Tools**.
+   - The model emits tool calls; our client executes them in-process; results go back into the chat.
+   - This matches “direct” tool integration in OpenAI/Anthropic function-calling. ([Mistral AI Documentation][5])
 
 2. **MCP (via local proxy) with Ollama**
-
-   * Still use **Ollama Tools**, but the “tool” is a **thin proxy** that forwards `name/arguments` to a **local MCP server** using JSON-RPC (`tools/call`).
-   * The MCP server hosts the *real* tools and returns the results → proxy → model.
-   * Architecture shape matches Claude/ChatGPT (runtime ⇄ MCP server ⇄ tools); only difference is **we** provide the MCP client/proxy because Ollama itself isn’t an MCP client. ([Model Context Protocol][6])
+   - Still use **Ollama Tools**, but the “tool” is a **thin proxy** that forwards `name/arguments` to a **local MCP server** using JSON-RPC (`tools/call`).
+   - The MCP server hosts the _real_ tools and returns the results → proxy → model.
+   - Architecture shape matches Claude/ChatGPT (runtime ⇄ MCP server ⇄ tools); only difference is **we** provide the MCP client/proxy because Ollama itself isn’t an MCP client. ([Model Context Protocol][6])
 
 ---
 
@@ -71,8 +69,8 @@ Tool implementation
 Result → MCP client → back into chat
 ```
 
-* In **ChatGPT/Claude**, the **MCP client is built into the runtime** (no extra proxy needed). ([OpenAI Help Center][2])
-* In **Ollama**, we add a tiny MCP client/proxy to achieve the same flow locally.
+- In **ChatGPT/Claude**, the **MCP client is built into the runtime** (no extra proxy needed). ([OpenAI Help Center][2])
+- In **Ollama**, we add a tiny MCP client/proxy to achieve the same flow locally.
 
 ---
 
@@ -80,8 +78,8 @@ Result → MCP client → back into chat
 
 **DTA (Ollama Tools):**
 
-* We register **each tool** (schema, name) with Ollama.
-* The model can emit **multiple tool calls**, even in the same turn; we execute each and return observations; the model produces the final answer. (Parallel calling is a known pattern in tool-calling runtimes.) ([Claude Docs][7])
+- We register **each tool** (schema, name) with Ollama.
+- The model can emit **multiple tool calls**, even in the same turn; we execute each and return observations; the model produces the final answer. (Parallel calling is a known pattern in tool-calling runtimes.) ([Claude Docs][7])
 
 **MCP (via proxy on Ollama):** two ways
 
@@ -91,7 +89,7 @@ Result → MCP client → back into chat
 
 **MCP (native in ChatGPT/Claude):**
 
-* The runtime’s MCP client does discovery (`tools/list`) and presents tools to the model internally; when the model chooses tools, the runtime performs the JSON-RPC to the MCP server. ([Claude Docs][8])
+- The runtime’s MCP client does discovery (`tools/list`) and presents tools to the model internally; when the model chooses tools, the runtime performs the JSON-RPC to the MCP server. ([Claude Docs][8])
 
 ---
 
@@ -99,9 +97,9 @@ Result → MCP client → back into chat
 
 If you move off `llama3.2`, pick a small, tool-calling-friendly instruct model so your 3070 can run it comfortably:
 
-* **Qwen 2.5 7B Instruct** — strong function-calling templates; supported with Ollama given correct templates. ([Qwen][9])
-* **Llama 3.1 8B Instruct** — explicitly highlighted by Ollama for tool calling. ([ollama.com][4])
-* (Mistral-class 7B instruct models also support function calling via similar APIs.) ([Mistral AI Documentation][5])
+- **Qwen 2.5 7B Instruct** — strong function-calling templates; supported with Ollama given correct templates. ([Qwen][9])
+- **Llama 3.1 8B Instruct** — explicitly highlighted by Ollama for tool calling. ([ollama.com][4])
+- (Mistral-class 7B instruct models also support function calling via similar APIs.) ([Mistral AI Documentation][5])
 
 These give you reliable structured outputs for tool selection while staying feasible locally.
 
@@ -109,21 +107,20 @@ These give you reliable structured outputs for tool selection while staying feas
 
 ## Why this satisfies our project plan
 
-* We can **benchmark DTA vs MCP** locally with **identical prompts and tasks**, by swapping the executor (direct call vs MCP JSON-RPC).
-* Later, if we test **Claude/ChatGPT**, we keep the same tools:
-
-  * **DTA** → register direct tools in their tool-calling API.
-  * **MCP** → point their **built-in MCP client** at our MCP server.
+- We can **benchmark DTA vs MCP** locally with **identical prompts and tasks**, by swapping the executor (direct call vs MCP JSON-RPC).
+- Later, if we test **Claude/ChatGPT**, we keep the same tools:
+  - **DTA** → register direct tools in their tool-calling API.
+  - **MCP** → point their **built-in MCP client** at our MCP server.
     The protocol and flow remain the same; only the host/runtime changes. ([Claude Docs][8])
 
 ---
 
 ### One-liner takeaways for the team
 
-* **MCP ≠ a model feature**; it’s a **runtime protocol** (JSON-RPC) between an **MCP client** and **MCP servers/tools**. ([Model Context Protocol][1])
-* **ChatGPT/Claude “support MCP”** because their **runtimes** include an **MCP client** and let you add connectors. ([OpenAI Help Center][2])
-* **Ollama doesn’t ship an MCP client**, but we can **wrap it** so our local setup behaves like ChatGPT/Claude with MCP. ([Model Context Protocol][6])
-* **DTA vs MCP** in our repo = same tasks, same prompts; only the **executor path** changes → apples-to-apples latency/DX measurements.
+- **MCP ≠ a model feature**; it’s a **runtime protocol** (JSON-RPC) between an **MCP client** and **MCP servers/tools**. ([Model Context Protocol][1])
+- **ChatGPT/Claude “support MCP”** because their **runtimes** include an **MCP client** and let you add connectors. ([OpenAI Help Center][2])
+- **Ollama doesn’t ship an MCP client**, but we can **wrap it** so our local setup behaves like ChatGPT/Claude with MCP. ([Model Context Protocol][6])
+- **DTA vs MCP** in our repo = same tasks, same prompts; only the **executor path** changes → apples-to-apples latency/DX measurements.
 
 [1]: https://modelcontextprotocol.io/specification/2025-03-26/basic?utm_source=chatgpt.com "Overview"
 [2]: https://help.openai.com/en/articles/11487775-connectors-in-chatgpt?utm_source=chatgpt.com "Connectors in ChatGPT"

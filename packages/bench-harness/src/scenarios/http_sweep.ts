@@ -47,7 +47,8 @@ async function callTool(client: BenchMcpClient, name: string, args: unknown) {
 export async function httpSweep(impl: Impl, options: HttpSweepOptions = {}) {
   const sizes = options.sizes ?? DEFAULT_SIZES;
   const client = options.client;
-  if (impl === "mcp" && !client) throw new Error("MCP client required for mcp implementation");
+  if (impl === "mcp" && !client)
+    throw new Error("MCP client required for mcp implementation");
 
   const collectRaw = options.collectRaw ?? false;
   const timeMs = options.timeMs ?? 200;

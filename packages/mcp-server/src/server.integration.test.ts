@@ -5,10 +5,18 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { startServer, type ServerHandle, type JsonRpcResponse } from "./server.js";
+import {
+  startServer,
+  type ServerHandle,
+  type JsonRpcResponse,
+} from "./server.js";
 
 class NullWritable extends Writable {
-  _write(_chunk: any, _encoding: BufferEncoding, callback: (error?: Error | null) => void) {
+  _write(
+    _chunk: any,
+    _encoding: BufferEncoding,
+    callback: (error?: Error | null) => void,
+  ) {
     callback();
   }
 }
@@ -60,20 +68,32 @@ describe("mcp-server stdio loop", () => {
     const tools = (list.result as any)?.tools;
     expect(Array.isArray(tools)).toBe(true);
 
-    send("tools/call", { name: "write_file", arguments: { path: "sample.txt", data: "hello" } }, "2");
+    send(
+      "tools/call",
+      { name: "write_file", arguments: { path: "sample.txt", data: "hello" } },
+      "2",
+    );
     const writeRes = await read();
-    expect((writeRes.result as any)).toMatchObject({ ok: true });
+    expect(writeRes.result as any).toMatchObject({ ok: true });
 
     const absPath = join(sandboxRoot, "sample.txt");
     expect(await readFile(absPath, "utf8")).toBe("hello");
 
-    send("tools/call", { name: "read_file", arguments: { path: "sample.txt" } }, "3");
+    send(
+      "tools/call",
+      { name: "read_file", arguments: { path: "sample.txt" } },
+      "3",
+    );
     const readRes = await read();
-    expect((readRes.result as any)).toMatchObject({ data: "hello" });
+    expect(readRes.result as any).toMatchObject({ data: "hello" });
 
-    send("tools/call", { name: "remove_file", arguments: { path: "sample.txt" } }, "4");
+    send(
+      "tools/call",
+      { name: "remove_file", arguments: { path: "sample.txt" } },
+      "4",
+    );
     const rmRes = await read();
-    expect((rmRes.result as any)).toMatchObject({ ok: true });
+    expect(rmRes.result as any).toMatchObject({ ok: true });
     await expect(access(absPath)).rejects.toThrow();
   });
 
@@ -82,7 +102,11 @@ describe("mcp-server stdio loop", () => {
     const err1 = await read();
     expect(err1.error).toMatchObject({ code: -32601 });
 
-    send("tools/call", { name: "write_file", arguments: { path: "../oops", data: "x" } }, "bad2");
+    send(
+      "tools/call",
+      { name: "write_file", arguments: { path: "../oops", data: "x" } },
+      "bad2",
+    );
     const err2 = await read();
     expect(err2.error).toMatchObject({ code: -32602 });
   });

@@ -22,5 +22,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, () =>
-  console.log(`mock upstream listening on http://localhost:${port}`)
+  console.log(`mock upstream listening on http://localhost:${port}`),
 );

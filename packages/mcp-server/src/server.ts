@@ -1,7 +1,13 @@
 import { createInterface, type Interface } from "node:readline";
 import { stdin, stdout, stderr } from "node:process";
 import { ZodError } from "zod";
-import { executeTool, isToolName, listTools, validate, ToolInputError } from "./tools.js";
+import {
+  executeTool,
+  isToolName,
+  listTools,
+  validate,
+  ToolInputError,
+} from "./tools.js";
 import { ensureSandboxRoot, SandboxPathError } from "./sandbox.js";
 
 const JSONRPC_VERSION = "2.0";
@@ -32,7 +38,12 @@ function ok(id: JsonRpcId, result: unknown): JsonRpcResponse {
   return { jsonrpc: JSONRPC_VERSION, id, result };
 }
 
-function err(id: JsonRpcId, code: number, message: string, data?: unknown): JsonRpcResponse {
+function err(
+  id: JsonRpcId,
+  code: number,
+  message: string,
+  data?: unknown,
+): JsonRpcResponse {
   const payload: JsonRpcResponse = {
     jsonrpc: JSONRPC_VERSION,
     id,
@@ -62,7 +73,9 @@ export interface ServerHandle {
   readonly sandboxRoot: string;
 }
 
-export async function startServer(options: StartOptions = {}): Promise<ServerHandle> {
+export async function startServer(
+  options: StartOptions = {},
+): Promise<ServerHandle> {
   const input = options.input ?? stdin;
   const output = options.output ?? stdout;
   const error = options.error ?? stderr;
@@ -94,7 +107,9 @@ export async function startServer(options: StartOptions = {}): Promise<ServerHan
     };
 
     if (typeof name !== "string") {
-      send(err(id, -32602, "Invalid params", { reason: "name must be string" }));
+      send(
+        err(id, -32602, "Invalid params", { reason: "name must be string" }),
+      );
       return;
     }
 
@@ -116,7 +131,9 @@ export async function startServer(options: StartOptions = {}): Promise<ServerHan
     }
 
     try {
-      const result = await executeTool(name, parsedArgs as never, { sandboxRoot });
+      const result = await executeTool(name, parsedArgs as never, {
+        sandboxRoot,
+      });
       send(ok(id, result));
     } catch (e) {
       if (e instanceof SandboxPathError || e instanceof ToolInputError) {
@@ -143,13 +160,16 @@ export async function startServer(options: StartOptions = {}): Promise<ServerHan
       return;
     }
 
-    if (request.jsonrpc !== JSONRPC_VERSION || typeof request.method !== "string") {
-      const id = isValidId(request.id) ? request.id ?? null : null;
+    if (
+      request.jsonrpc !== JSONRPC_VERSION ||
+      typeof request.method !== "string"
+    ) {
+      const id = isValidId(request.id) ? (request.id ?? null) : null;
       send(err(id, -32600, "Invalid request"));
       return;
     }
 
-    const id = isValidId(request.id) ? request.id ?? null : null;
+    const id = isValidId(request.id) ? (request.id ?? null) : null;
 
     switch (request.method) {
       case "tools/list":

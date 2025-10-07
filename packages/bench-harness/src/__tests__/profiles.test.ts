@@ -38,7 +38,7 @@ describe("withProfile", () => {
     await expect(
       withProfile("netem40", async () => {
         throw new Error("boom");
-      })
+      }),
     ).rejects.toThrow("boom");
     expect(spawnMock).toHaveBeenCalledTimes(2);
   });

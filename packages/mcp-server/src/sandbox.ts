@@ -10,7 +10,10 @@ export class SandboxPathError extends Error {
 
 export function getSandboxRoot(): string {
   const rootEnv = process.env.MCP_SANDBOX_ROOT;
-  const base = rootEnv && rootEnv.trim().length > 0 ? rootEnv : resolve(process.cwd(), "sandbox");
+  const base =
+    rootEnv && rootEnv.trim().length > 0
+      ? rootEnv
+      : resolve(process.cwd(), "sandbox");
   return resolve(base);
 }
 

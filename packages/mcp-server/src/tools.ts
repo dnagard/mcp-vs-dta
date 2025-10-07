@@ -117,7 +117,9 @@ export const toolSchemas = {
 
 export type ToolName = keyof typeof toolSchemas;
 
-type InferSchema<T extends ToolName> = z.infer<(typeof toolSchemas)[T]["schema"]>;
+type InferSchema<T extends ToolName> = z.infer<
+  (typeof toolSchemas)[T]["schema"]
+>;
 
 export function listTools() {
   return Object.values(toolSchemas).map((tool) => ({
@@ -127,7 +129,10 @@ export function listTools() {
   }));
 }
 
-export function validate<T extends ToolName>(name: T, args: unknown): InferSchema<T> {
+export function validate<T extends ToolName>(
+  name: T,
+  args: unknown,
+): InferSchema<T> {
   const def = toolSchemas[name];
   if (!def) {
     throw new Error(`Unknown tool: ${name}`);
@@ -169,7 +174,9 @@ const handlers = {
   async http_get_json(args: InferSchema<"http_get_json">, _ctx: ToolContext) {
     const url = new URL(args.url);
     if (!isHttpProtocol(url.protocol)) {
-      throw new ToolInputError(`Unsupported URL protocol: ${url.protocol || "unknown"}`);
+      throw new ToolInputError(
+        `Unsupported URL protocol: ${url.protocol || "unknown"}`,
+      );
     }
     const json = await httpGetJSON(url.toString());
     return {
@@ -181,7 +188,9 @@ const handlers = {
   async http_get_blob(args: InferSchema<"http_get_blob">, _ctx: ToolContext) {
     const url = new URL(args.url);
     if (!isHttpProtocol(url.protocol)) {
-      throw new ToolInputError(`Unsupported URL protocol: ${url.protocol || "unknown"}`);
+      throw new ToolInputError(
+        `Unsupported URL protocol: ${url.protocol || "unknown"}`,
+      );
     }
     const buffer = await httpGetArrayBuffer(url.toString());
     return {
@@ -199,7 +208,10 @@ export async function executeTool<T extends ToolName>(
   args: InferSchema<T>,
   ctx: ToolContext,
 ) {
-  const handler = handlers[name] as (args: InferSchema<T>, ctx: ToolContext) => Promise<any>;
+  const handler = handlers[name] as (
+    args: InferSchema<T>,
+    ctx: ToolContext,
+  ) => Promise<any>;
   return handler(args, ctx);
 }
 

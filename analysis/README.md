@@ -7,6 +7,7 @@ pnpm -C packages/bench-harness run bench:stats --output-json analysis/results/de
 ```
 
 The JSON payload captures:
+
 - profile metadata (`default`, `netem40`, etc.)
 - per-scenario summaries with mean/p50/p95/p99 latencies and Tinybench throughput (`hz`)
 - optional per-iteration timing samples (`--collect-raw`)

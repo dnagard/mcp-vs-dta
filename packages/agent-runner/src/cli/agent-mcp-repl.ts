@@ -16,7 +16,13 @@ async function chat(messages: Msg[], tools: OllamaTool[]) {
   const res = await fetch(`${BASE}/api/chat`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, messages, tools, stream: false, options: { temperature: 0.1 } }),
+    body: JSON.stringify({
+      model: MODEL,
+      messages,
+      tools,
+      stream: false,
+      options: { temperature: 0.1 },
+    }),
   });
   if (!res.ok) throw new Error(`LLM error: ${res.status}`);
   return res.json();
@@ -34,9 +40,14 @@ async function runTurn(history: Msg[], user: string, tools: OllamaTool[]) {
       const name = tc?.function?.name;
       let args = tc?.function?.arguments;
       if (!name) continue;
-      try { if (typeof args === "string") args = JSON.parse(args); } catch {}
+      try {
+        if (typeof args === "string") args = JSON.parse(args);
+      } catch {}
       const result = await mcpInvoker.invoke(name, args);
-      history.push({ role: "tool", content: JSON.stringify({ name, args, result }) });
+      history.push({
+        role: "tool",
+        content: JSON.stringify({ name, args, result }),
+      });
     }
     resp = await chat(history, tools);
     msg = resp?.message ?? {};
@@ -44,7 +55,10 @@ async function runTurn(history: Msg[], user: string, tools: OllamaTool[]) {
   }
 
   const text = (msg?.content || "").trim();
-  if (text) { console.log(text + "\n"); history.push({ role: "assistant", content: text }); }
+  if (text) {
+    console.log(text + "\n");
+    history.push({ role: "assistant", content: text });
+  }
 }
 
 async function main() {
@@ -53,22 +67,43 @@ async function main() {
   try {
     const mcpList = await mcpInvoker.listTools();
     tools = mapMcpToOllamaTools(mcpList);
-    if (!tools.length) console.warn("MCP server returned no tools; exposing none to the model.");
+    if (!tools.length)
+      console.warn("MCP server returned no tools; exposing none to the model.");
   } catch (e: any) {
-    console.warn("Failed to fetch MCP tool catalog; starting with no tools.", e?.message ?? String(e));
+    console.warn(
+      "Failed to fetch MCP tool catalog; starting with no tools.",
+      e?.message ?? String(e),
+    );
   }
 
   const history: Msg[] = [{ role: "system", content: systemPrompt }];
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout, prompt: "> " });
-  console.log(`agent-mcp-repl (model=${MODEL}). Type /bye to quit.`); rl.prompt();
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: "> ",
+  });
+  console.log(`agent-mcp-repl (model=${MODEL}). Type /bye to quit.`);
+  rl.prompt();
 
   rl.on("line", async (line) => {
     const input = line.trim();
     if (!input) return rl.prompt();
-    if (input === "/bye") { console.log("Bye!"); rl.close(); return; }
+    if (input === "/bye") {
+      console.log("Bye!");
+      rl.close();
+      return;
+    }
     rl.pause();
-    try { await runTurn(history, input, tools); } catch (e: any) { console.error("Error:", e?.message ?? String(e)); }
-    rl.resume(); rl.prompt();
+    try {
+      await runTurn(history, input, tools);
+    } catch (e: any) {
+      console.error("Error:", e?.message ?? String(e));
+    }
+    rl.resume();
+    rl.prompt();
   });
 }
-main().catch((e) => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

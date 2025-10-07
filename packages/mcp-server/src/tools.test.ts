@@ -32,17 +32,25 @@ describe("filesystem tools", () => {
     const read = await executeTool("read_file", { path }, { sandboxRoot });
     expect(read).toMatchObject({ ok: true, data: "hello" });
     await executeTool("remove_file", { path }, { sandboxRoot });
-    await expect(fs.access(resolveSandbox(sandboxRoot, path))).rejects.toThrow();
+    await expect(
+      fs.access(resolveSandbox(sandboxRoot, path)),
+    ).rejects.toThrow();
   });
 
   it("rejects sandbox escape attempts", async () => {
     await expect(
-      executeTool("write_file", { path: "../../etc/passwd", data: "nope" }, { sandboxRoot })
+      executeTool(
+        "write_file",
+        { path: "../../etc/passwd", data: "nope" },
+        { sandboxRoot },
+      ),
     ).rejects.toBeInstanceOf(SandboxPathError);
   });
 
   it("returns IO errors for missing files", async () => {
-    await expect(executeTool("read_file", { path: "missing.txt" }, { sandboxRoot })).rejects.toThrow();
+    await expect(
+      executeTool("read_file", { path: "missing.txt" }, { sandboxRoot }),
+    ).rejects.toThrow();
   });
 });
 
@@ -64,7 +72,9 @@ describe("http tools", () => {
       }
       res.writeHead(404).end();
     });
-    await new Promise<void>((resolvePromise) => server.listen(0, resolvePromise));
+    await new Promise<void>((resolvePromise) =>
+      server.listen(0, resolvePromise),
+    );
     const address = server.address();
     if (typeof address === "object" && address) {
       urlBase = `http://127.0.0.1:${address.port}`;
@@ -75,7 +85,7 @@ describe("http tools", () => {
 
   afterEach(async () => {
     await new Promise<void>((resolvePromise, rejectPromise) =>
-      server.close((err) => (err ? rejectPromise(err) : resolvePromise()))
+      server.close((err) => (err ? rejectPromise(err) : resolvePromise())),
     );
   });
 
@@ -83,7 +93,7 @@ describe("http tools", () => {
     const result = await executeTool(
       "http_get_json",
       { url: `${urlBase}/json` },
-      { sandboxRoot: tmpdir() }
+      { sandboxRoot: tmpdir() },
     );
     expect(result).toMatchObject({ ok: true, json: { ok: true } });
   });
@@ -92,21 +102,27 @@ describe("http tools", () => {
     const result = await executeTool(
       "http_get_blob",
       { url: `${urlBase}/blob` },
-      { sandboxRoot: tmpdir() }
+      { sandboxRoot: tmpdir() },
     );
     expect(result).toMatchObject({ ok: true, bytes: 4 });
   });
 
   it("rejects unsupported schemes", async () => {
     await expect(
-      executeTool("http_get_json", { url: "ftp://example.com" }, { sandboxRoot: tmpdir() })
+      executeTool(
+        "http_get_json",
+        { url: "ftp://example.com" },
+        { sandboxRoot: tmpdir() },
+      ),
     ).rejects.toBeInstanceOf(ToolInputError);
   });
 });
 
 describe("validation", () => {
   it("surfaces zod issues for missing data", () => {
-    expect(() => validate("write_file", { path: "a" } as any)).toThrow(ZodError);
+    expect(() => validate("write_file", { path: "a" } as any)).toThrow(
+      ZodError,
+    );
   });
 
   it("throws on unknown tools", () => {

@@ -16,7 +16,9 @@ export interface BenchCaseResult {
   hz: number;
 }
 
-export async function runBenchCase(options: BenchCaseOptions): Promise<BenchCaseResult> {
+export async function runBenchCase(
+  options: BenchCaseOptions,
+): Promise<BenchCaseResult> {
   const { name, fn, timeMs = 200, iterations, warmup = true } = options;
 
   const bench = new Bench({ time: timeMs, iterations });
