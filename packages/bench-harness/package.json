@@ -8,6 +8,8 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --reporter=dot",
     "bench": "tsx src/harness.ts",
+    "bench:medium": "tsx src/cli/bench-stats.ts --time-ms 5000 --output-json analysis/results/run.json --output-csv-dir analysis/results --output-raw-csv-dir analysis/results --collect-raw --http-sizes 0,512,1024,2048,4096,8192,16384,32768,65536,131072,262144,524288,1048576 --fs-sizes 4096,8192,16384,32768,65536,131072,262144,524288,1048576 --profiles default,netem40",
+    "bench:large": "tsx src/cli/bench-stats.ts --time-ms 10000 --output-json analysis/results/run.json --output-csv-dir analysis/results --output-raw-csv-dir analysis/results --collect-raw --http-sizes 0,512,1024,2048,4096,8192,16384,32768,65536,131072,262144,524288,1048576 --fs-sizes 4096,8192,16384,32768,65536,131072,262144,524288,1048576 --profiles default,delay40,loss1,netem40,bursty,slowlink",
     "dev": "tsx src/harness.ts",
     "bench:stats": "tsx src/cli/bench-stats.ts"
   },

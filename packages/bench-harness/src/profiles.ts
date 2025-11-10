@@ -45,11 +45,45 @@ export const PROFILES: Record<string, BenchProfile> = {
     name: "default",
     description: "No network shaping applied",
   },
+
+  // latency only
+  delay40: {
+    name: "delay40",
+    description: "40ms ±10ms, no loss",
+    setup: () => runScript("setup-netem.sh", ["lo", "40ms", "10ms", "0%"]),
+    teardown: () => runScript("clear-netem.sh", ["lo"]),
+  },
+
+  // loss only
+  loss1: {
+    name: "loss1",
+    description: "1% loss, no added delay",
+    setup: () => runScript("setup-netem.sh", ["lo", "0ms", "0ms", "1%"]),
+    teardown: () => runScript("clear-netem.sh", ["lo"]),
+  },
+
+  // mixed (your existing netem40)
   netem40: {
     name: "netem40",
-    description: "tc netem 40ms ±10ms with 1% loss",
-    setup: () => runScript("setup-netem.sh", ["eth0", "40ms", "10ms", "1%"]),
-    teardown: () => runScript("clear-netem.sh", ["eth0"]),
+    description: "40ms ±10ms with 1% loss",
+    setup: () => runScript("setup-netem.sh", ["lo", "40ms", "10ms", "1%"]),
+    teardown: () => runScript("clear-netem.sh", ["lo"]),
+  },
+
+  // bursty loss (correlation)
+  bursty: {
+    name: "bursty",
+    description: "10ms ±2ms, 1% loss with 25% correlation (bursty)",
+    setup: () => runScript("setup-netem.sh", ["lo", "10ms", "2ms", "1%", "25%"]),
+    teardown: () => runScript("clear-netem.sh", ["lo"]),
+  },
+
+  // slow link (rate limit)
+  slowlink: {
+    name: "slowlink",
+    description: "60ms ±20ms, 0% loss, 10mbit rate",
+    setup: () => runScript("setup-netem.sh", ["lo", "60ms", "20ms", "0%", "0%", "10mbit"]),
+    teardown: () => runScript("clear-netem.sh", ["lo"]),
   },
 };
 
